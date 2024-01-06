@@ -22,7 +22,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "apss.accounts",
+    "apps.accounts",
     "apps.common",
     "apps.contacts",
 ]
@@ -38,6 +38,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+AUTH_USER_MODEL = "accounts.User"
 
 ROOT_URLCONF = 'contacts_api.urls'
 
