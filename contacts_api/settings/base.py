@@ -5,6 +5,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
+JWT_SECRET = config("JWT_SECRET")
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
 
@@ -62,7 +63,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'contacts_api.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -115,3 +115,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

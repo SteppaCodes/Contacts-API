@@ -6,7 +6,7 @@ import uuid
 from .managers import CustomUserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(default=uuid.uuid4(), editable=False, primary_key=True, unique=True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(_('Email Address'), unique=True)
