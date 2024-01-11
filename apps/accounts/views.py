@@ -25,7 +25,6 @@ class RegisterView(APIView):
 
 
 class LoginVIew(APIView):
-    authentication_classes = [JWTAuthentication]
     def post(self, request):
         data = request.data
 
@@ -35,9 +34,9 @@ class LoginVIew(APIView):
         #authenticate the user
         user = authenticate(email=email, password=password)
         if user:
+            payload = {"email":user.email, "first_name":user.first_name}
             token = jwt.encode(
-                {"email":user.email}, settings.JWT_SECRET
-            )
+                payload, settings.JWT_SECRET)
             serializer = UserSerializer(user)
         
             return Response({"user":serializer.data, "token":token})
