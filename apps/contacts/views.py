@@ -7,7 +7,7 @@ from apps.accounts.auth import JWTAuthentication
 from .serializers import ContactSerializer
 
 
-class ContactListAPIView(APIView):
+class ContactListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ContactSerializer
 
@@ -15,4 +15,10 @@ class ContactListAPIView(APIView):
         contacts = Contact.objects.filter(owner=request.user)
         serializer = self.serializer_class(contacts, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=201)
     
