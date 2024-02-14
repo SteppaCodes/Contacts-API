@@ -5,6 +5,7 @@ from django.conf import settings
 #DRF imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 #local imports
 from .serialiers import UserSerializer
 from .auth import JWTAuthentication
@@ -12,8 +13,19 @@ from .models import User
 
 import jwt
 
+
+tags = ['Auth']
+
 class RegisterView(APIView):
     serializer_class = UserSerializer
+
+    @extend_schema(
+        tags=tags,
+        summary="Register a new user",
+        description="This endpoint registers a new user",
+        request=UserSerializer,
+        responses={"201": UserSerializer}
+    )
     def post(self,request):
 
         serializer = self.serializer_class(data=request.data)
@@ -25,6 +37,15 @@ class RegisterView(APIView):
 
 
 class LoginVIew(APIView):
+    serializer_class = UserSerializer
+
+    @extend_schema(
+            tags=tags,
+            summary="Login a user",
+            description="This endpoint logs a user in",
+            request=UserSerializer,
+            responses={"200": UserSerializer}
+    )
     def post(self, request):
         data = request.data
 
@@ -37,7 +58,7 @@ class LoginVIew(APIView):
             payload = {"email":user.email, "first_name":user.first_name}
             token = jwt.encode(
                 payload, settings.JWT_SECRET)
-            serializer = UserSerializer(user)
+            serializer = self.serializer_class(user)
         
             return Response({"user":serializer.data, "token":token})
         else:
