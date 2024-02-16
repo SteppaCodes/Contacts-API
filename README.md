@@ -1,2 +1,2 @@
 # Contacts-API
-A contacts api using django rest framework
+A contacts api built using django rest framework
