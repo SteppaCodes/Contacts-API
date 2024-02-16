@@ -1,20 +1,23 @@
-#django imports
+# django imports
 from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.conf import settings
-#DRF imports
+
+# DRF imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-#local imports
-from .serialiers import UserSerializer
-from .auth import JWTAuthentication
+from rest_framework import status
+
+# local imports
+from .serializers import UserSerializer, LoginSerialzer
 from .models import User
 
 import jwt
 
 
-tags = ['Auth']
+tags = ["Auth"]
+
 
 class RegisterView(APIView):
     serializer_class = UserSerializer
@@ -24,43 +27,28 @@ class RegisterView(APIView):
         summary="Register a new user",
         description="This endpoint registers a new user",
         request=UserSerializer,
-        responses={"201": UserSerializer}
+        responses={"201": UserSerializer},
     )
-    def post(self,request):
+    def post(self, request):
 
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            data = serializer.validated_data
-            User.objects.create_user(**data)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"data": serializer.data}, status=status.HTTP_201_CREATED)
 
 
 class LoginVIew(APIView):
-    serializer_class = UserSerializer
+    serializer_class = LoginSerialzer
 
     @extend_schema(
-            tags=tags,
-            summary="Login a user",
-            description="This endpoint logs a user in",
-            request=UserSerializer,
-            responses={"200": UserSerializer}
+        tags=tags,
+        summary="Login a user",
+        description="This endpoint logs a user in",
+        request=LoginSerialzer,
+        responses={"200": LoginSerialzer},
     )
     def post(self, request):
-        data = request.data
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid()
 
-        email = data.get("email")
-        password = data.get('password')
-
-        #authenticate the user
-        user = authenticate(email=email, password=password)
-        if user:
-            payload = {"email":user.email, "first_name":user.first_name}
-            token = jwt.encode(
-                payload, settings.JWT_SECRET)
-            serializer = self.serializer_class(user)
-        
-            return Response({"user":serializer.data, "token":token})
-        else:
-            return Response({"error": "Authentication failed"})
-        
+        return Response({"data": serializer.data}, status=status.HTTP_202_ACCEPTED)

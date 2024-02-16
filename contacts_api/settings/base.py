@@ -20,6 +20,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework_simplejwt",
     "drf_spectacular",
 ]
 
@@ -119,18 +120,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ["apps.accounts.auth.JWTAuthentication"],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "CONTACT LIST API",
     "DESCRIPTION": "A contact list API django rest framework",
-    "VERSION": '1.0.0',
+    "VERSION": "1.0.0",
     "SECURITY": [
         {
             "bearerAuth": [],
         }
     ],
 }
-

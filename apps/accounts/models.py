@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 import uuid
 
 from .managers import CustomUserManager
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True)
@@ -30,4 +31,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.full_name
+
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {
+            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),
+        }
 

@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 from .models import Contact
-from apps.accounts.auth import JWTAuthentication
 from .serializers import ContactSerializer
 
 tags = ["Contacts"]
