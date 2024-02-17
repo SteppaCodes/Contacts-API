@@ -9,20 +9,20 @@ A contacts api built using django rest framework
 
 - Download or clone this repostory using
   ```sh
-   git clone git@github.com:SteppaCodes/Contacts-API.git
+  git clone git@github.com:SteppaCodes/Contacts-API.git
 - Navigate into your project directory
   ```sh
-    cd conacts-api
+  cd conacts-api
 - Create a virtual environment
   ```sh
   python -m venv env
 - Activate the virtual environment
 - On Windows:
   ```sh
-   env\scripts\activate
+  env\scripts\activate
 - On Macos:
   ```sh 
-             source env/bin/activate
+  source env/bin/activate
 - Install dependencies
   ```sh
   pip install - requirements.txt
@@ -42,11 +42,14 @@ A contacts api built using django rest framework
 # API Endpoints
 - /api/v1/contacts/
   GET: Retrieve a list of all contacts or create a new contact.
+  
   POST: Create a new contact.
   
 - /api/contacts/{id}/
   GET: Retrieve details of a specific contact.
+  
   PUT: Update details of a specific contact.
+  
   DELETE: Delete a specific contact.
 
 # Authentication
