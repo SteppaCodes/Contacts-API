@@ -41,13 +41,13 @@ A contacts api built using django rest framework
 
 # API Endpoints
 - /api/v1/contacts/
-- 
+
   GET: Retrieve a list of all contacts or create a new contact.
   
   POST: Create a new contact.
   
 - /api/contacts/{id}/
-- 
+
   GET: Retrieve details of a specific contact.
   
   PUT: Update details of a specific contact.
