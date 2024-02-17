@@ -17,12 +17,12 @@ A contacts api built using django rest framework
   ```sh
   python -m venv env
 - Activate the virtual environment
-  On Windows:
-      ```sh
-      env\scripts\activate
-  On Macos:
-    ```sh 
-         source env/bin/activate
+- On Windows:
+  ```sh
+   env\scripts\activate
+- On Macos:
+  ```sh 
+             source env/bin/activate
 - Install dependencies
   ```sh
   pip install - requirements.txt
