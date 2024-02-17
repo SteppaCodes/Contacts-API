@@ -37,7 +37,7 @@ A contacts api built using django rest framework
   python manage.py runserver
 - Access the API: on your browser, navigate to
    ``` sh
-    http://127.0.0.1:8000/v1/
+    http://127.0.0.1:8000/api/v1/
 
 # API Endpoints
 - /api/v1/contacts/
