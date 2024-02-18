@@ -5,9 +5,10 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = [
-            "country_code",
+            "id",
             "first_name",
             "last_name",
+            "country_code",
             "phone_number",
             "contact_picture",
             "is_favourite"

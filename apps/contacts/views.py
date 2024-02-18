@@ -39,9 +39,11 @@ class ContactListCreateAPIView(APIView):
             OpenApiExample(
                 name="Create Contact Example",
                 value={
-                    "name": "John Doe",
-                    "email": "john@example.com",
-                    "phone": "1234567890",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "country_code":"234",
+                    "contact_picture":"https://www.shutterstock.com/image-vector/microblog-platform-abstract-concept-vector-illustration-1852998859",
+                    "phone_number": "1234567890",
                 },
                 description="Example request body for creating a contact.",
             )
@@ -51,7 +53,7 @@ class ContactListCreateAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(owner=request.user)
-            return Response(serializer.data, status=201)
+            return Response({"data":serializer.data}, status=201)
 
 
 class ContactDetailView(APIView):

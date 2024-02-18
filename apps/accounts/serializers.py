@@ -8,11 +8,6 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
-    first_name = serializers.CharField(max_length=200)
-    last_name = serializers.CharField(max_length=200)
-    password = serializers.CharField(min_length=8, write_only=True)
-
     class Meta:
         model = User
         fields = [
@@ -22,18 +17,47 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
         ]
 
-        def validate(self, attrs):
-            email = attrs.get("email")
-            if User.objects.filter(email=email).exists():
-                raise serializers.ValidationError(
-                    {"email": "User with this Email already exists"}
-                )
-            return super().validate(attrs)
+ 
+class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    password = serializers.CharField(min_length=5, write_only=True)
+    password2 = serializers.CharField(min_length=5, write_only=True)
+    terms_agreement = serializers.BooleanField()
 
-        def create(self, validated_data):
-            return User.objects.create_user(**validated_data)
+    class Meta:
+        model = User
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "password",
+            "password2",
+            "terms_agreement"
+        ]
 
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password1 = attrs.get("password")
+        password2 = attrs.get("password2")
+        terms_agreement = attrs.get("terms_agreement")
 
+        user = User.objects.filter(email=email).first()
+        if user:
+            raise serializers.ValidationError({"error": "User with this Email already exists"}) 
+
+        if password1!= password2:
+            raise serializers.ValidationError({"error": "Passwords do not match"})
+        
+        if not terms_agreement:
+            raise serializers.ValidationError({"error": "You must agree to terms and conditions"})
+
+        return super().validate(attrs)
+    
+    def create(self, validated_data):
+        validated_data.pop("password2")
+        return User.objects.create_user(**validated_data)
 
 
 class LoginSerialzer(serializers.ModelSerializer):
@@ -69,3 +93,4 @@ class LoginSerialzer(serializers.ModelSerializer):
             "access_token": str(tokens.get("access_token")),
             "refresh_token": str(tokens.get("refresh_token")),
         }
+

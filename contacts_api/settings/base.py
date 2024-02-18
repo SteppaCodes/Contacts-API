@@ -127,8 +127,9 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "CONTACT LIST API",
-    "DESCRIPTION": "A contact list API django rest framework",
+    "TITLE": "CONTACTS API",
+    "DESCRIPTION": """A contact list API built with django rest framework. For testing, login using the following credentials
+      (email: steppaapitestuser@gmail.com, password: testuser)""",
     "VERSION": "1.0.0",
     "SECURITY": [
         {

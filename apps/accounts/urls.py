@@ -7,5 +7,4 @@ from .views import (
 urlpatterns = [
     path("register/", RegisterView.as_view()),
     path("login/", LoginVIew.as_view()),
-    path("", include("apps.contacts.urls"))
 ]

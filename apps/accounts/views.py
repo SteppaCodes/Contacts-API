@@ -6,11 +6,11 @@ from django.conf import settings
 # DRF imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from drf_spectacular.utils import extend_schema, OpenApiExample
 
 # local imports
-from .serializers import UserSerializer, LoginSerialzer
+from .serializers import (LoginSerialzer, RegisterSerializer)
 from .models import User
 
 import jwt
@@ -20,14 +20,14 @@ tags = ["Auth"]
 
 
 class RegisterView(APIView):
-    serializer_class = UserSerializer
+    serializer_class = RegisterSerializer
 
     @extend_schema(
         tags=tags,
         summary="Register a new user",
         description="This endpoint registers a new user",
-        request=UserSerializer,
-        responses={"201": UserSerializer},
+        request=RegisterSerializer,
+        responses={"201": RegisterSerializer},
     )
     def post(self, request):
 
@@ -46,6 +46,16 @@ class LoginVIew(APIView):
         description="This endpoint logs a user in",
         request=LoginSerialzer,
         responses={"200": LoginSerialzer},
+        examples=[
+            OpenApiExample(
+                name="Login User example",
+                value={
+                    "email": "steppaapitestuser@gmail.com",
+                    "password": "testuser",
+                },
+                description="Example request for authenticating a user",
+            )
+        ]
     )
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
