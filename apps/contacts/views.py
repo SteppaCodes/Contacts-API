@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Contact
 from .serializers import ContactSerializer
@@ -13,9 +14,10 @@ tags = ["Contacts"]
 # TODO search contacts
 
 
-class ContactListCreateAPIView(APIView):
+class ContactListCreateAPIView(APIView, PageNumberPagination):
     permission_classes = [IsAuthenticated]
     serializer_class = ContactSerializer
+    page_size = 10
 
     @extend_schema(
         tags=tags,
@@ -25,9 +27,10 @@ class ContactListCreateAPIView(APIView):
         # parameters=[OpenApiParameter(name="search", description="Search term", required=False, type=str)]
     )
     def get(self, request):
-        contacts = Contact.objects.filter(owner=request.user)
-        serializer = self.serializer_class(contacts, many=True)
-        return Response(serializer.data)
+        contacts = Contact.objects.filter(owner=request.user).order_by('full_name')
+        paginated_objects = self.paginate_queryset(contacts, request, view=self)
+        serializer = self.serializer_class(paginated_objects, many=True)
+        return self.get_paginated_response({"data": serializer.data})
 
     @extend_schema(
         tags=tags,
@@ -41,19 +44,19 @@ class ContactListCreateAPIView(APIView):
                 value={
                     "first_name": "John",
                     "last_name": "Doe",
-                    "country_code":"234",
-                    "contact_picture":"https://www.shutterstock.com/image-vector/microblog-platform-abstract-concept-vector-illustration-1852998859",
+                    "country_code": "234",
+                    "contact_picture": "https://www.shutterstock.com/image-vector/microblog-platform-abstract-concept-vector-illustration-1852998859",
                     "phone_number": "1234567890",
                 },
                 description="Example request body for creating a contact.",
             )
-        ]
+        ],
     )
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(owner=request.user)
-            return Response({"data":serializer.data}, status=201)
+            return Response({"data": serializer.data}, status=201)
 
 
 class ContactDetailView(APIView):
@@ -66,7 +69,6 @@ class ContactDetailView(APIView):
         description="This endpoint a contact's detail belonging to the authenticated user.",
         responses={200: ContactSerializer},
     )
-
     def get(self, request, pk):
 
         try:
@@ -88,7 +90,6 @@ class ContactDetailView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
-
 
     @extend_schema(
         tags=tags,
