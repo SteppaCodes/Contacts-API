@@ -27,7 +27,7 @@ class ContactListCreateAPIView(APIView, PageNumberPagination):
         # parameters=[OpenApiParameter(name="search", description="Search term", required=False, type=str)]
     )
     def get(self, request):
-        contacts = Contact.objects.filter(owner=request.user).order_by('full_name')
+        contacts = Contact.objects.filter(owner=request.user).order_by("first_name", "last_name")
         paginated_objects = self.paginate_queryset(contacts, request, view=self)
         serializer = self.serializer_class(paginated_objects, many=True)
         return self.get_paginated_response({"data": serializer.data})

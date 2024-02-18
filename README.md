@@ -2,9 +2,10 @@
 A contacts api built using django rest framework
 
 # Features 
-- Authentication: I implemented token-based authentication to fortify the API against unauthorized access. Utilizing DRF's authentication classes, i ensure secure communication between clients and the API
-- CRUD Operations: Leveraging the power of Django Rest Framework to seamlessly perform Create, Read, Update, and Delete operations on contacts.
-- Paginated Response: I leveraged the robust capabilities of Django Rest Framework's Pagination class to seamlessly deliver paginated responses for all endpoints returning multiple objects. By implementing pagination, users can efficiently retrieve a specified number of data per response, thereby minimizing query time and significantly boosting overall performance
+- Authentication: Implements token-based authentication to fortify the API against unauthorized access. Utilizing DRF's authentication classes, i ensure secure communication between clients and the API
+- CRUD Operations: Leverages the power of Django Rest Framework to seamlessly perform Create, Read, Update, and Delete operations on contacts.
+- Paginated Response: leveraging the robust capabilities of Django Rest Framework's Pagination class to seamlessly deliver paginated responses for all endpoints returning multiple objects. By implementing pagination, users can efficiently retrieve a specified number of data per response, thereby minimizing query time and significantly boosting overall performance
+- Alphabetical ordering for contact list results, enhancing user experience and making it easier to locate contacts by name
 
 # Testing API
 To test the functionality of the api, you can use the following login credentials to be authorized:
