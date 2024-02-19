@@ -20,7 +20,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "bidout/wsgi.py"
+            "dest": "contacts_api/wsgi.py"
         }
     ]
 }
