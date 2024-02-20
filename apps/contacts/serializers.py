@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from . models import Contact
+from .models import Contact
+
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +12,10 @@ class ContactSerializer(serializers.ModelSerializer):
             "country_code",
             "phone_number",
             "contact_picture",
-            "is_favourite"
+            "is_favourite",
+            "created_at",
+            "updated_at",
         ]
+
+        read_only_fileds = ["created_at", "updated_at"]
 
