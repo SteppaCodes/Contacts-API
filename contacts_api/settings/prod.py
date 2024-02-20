@@ -1,14 +1,15 @@
 from .base import *
 
-DEBUG=False
+DEBUG = False
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
+        "NAME": config("PROD_PG_DB"),
+        "URL": config("POSTGRES_URL"),
         "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST"),
-        "PORT": config("POSTGRES_PORT"),
+        "PASSWORD": config("PROD_PG_PASSWORD"),
+        "HOST": config("PROD_PG_HOST"),
+        "PORT": config("PROD_PG_PORT"),
     }
 }
