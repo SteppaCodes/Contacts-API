@@ -6,7 +6,6 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
-JWT_SECRET = config("JWT_SECRET")
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
 
