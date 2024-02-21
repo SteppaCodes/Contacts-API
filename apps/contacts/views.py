@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +12,6 @@ from .serializers import ContactSerializer, FavouritesSerializer
 tags = [["Contacts"], ["Favourites"]]
 
 # V2
-# TODO favourites list
 # TODO search contacts
 
 
@@ -24,12 +25,19 @@ class ContactListCreateAPIView(APIView, PageNumberPagination):
         summary="Retrieve contacts",
         description="This endpoint retrieves contacts belonging to the authenticated user.",
         responses={200: ContactSerializer},
-        # parameters=[OpenApiParameter(name="search", description="Search term", required=False, type=str)]
+        parameters=[OpenApiParameter(
+            name="query", 
+            description="contact first or last name ", 
+            required=False, type=str
+            )
+        ]
     )
     def get(self, request):
-        contacts = Contact.objects.filter(owner=request.user).order_by(
-            "first_name", "last_name"
-        )
+        query= request.GET.get("query")
+        if query == None:
+            query = ''
+        contacts = Contact.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query),owner=request.user).order_by("first_name", "last_name")
+
         paginated_objects = self.paginate_queryset(contacts, request, view=self)
         serializer = self.serializer_class(paginated_objects, many=True)
         return self.get_paginated_response({"data": serializer.data})
@@ -166,3 +174,6 @@ class FavouriteDetailAPIView(APIView):
             return Response({"Successsful": "Deleted successfully"})
         else:
             return Response({"error": "Contact not found"})
+
+
+
