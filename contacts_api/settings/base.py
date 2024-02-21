@@ -149,4 +149,9 @@ SPECTACULAR_SETTINGS = {
             "bearerAuth": [],
         }
     ],
+    "TAGS": [
+        {"name": "Auth", "description": "Authentication Endpoints"},
+        {"name": "Contacts", "description": "contacts endpoints"},
+        {"name": "Favourites", "description": "Favourites endpoints"},
+    ],
 }
