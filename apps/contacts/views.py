@@ -129,9 +129,23 @@ class FavouritesListCreateAPIView(APIView):
         summary="Retrieve favourites",
         description="This endpoint retreives the authenticated user's favourite contacts.",
         responses={200: FavouritesSerializer},
+        parameters=[OpenApiParameter(
+            name="query", 
+            description="contact first or last name ", 
+            required=False, type=str
+            )
+        ]
     )
     def get(self, request):
-        favourites = Favourite.objects.filter(owner=request.user)
+        query= request.GET.get("query")
+        if query == None:
+            query = ''
+
+        favourites = Favourite.objects.filter(
+            Q(contact__first_name__icontains=query) |
+            Q(contact__last_name__icontains=query), 
+            owner=request.user
+            )
         serializer = self.serializer_class(favourites, many=True)
         return Response({"data": serializer.data})
 
