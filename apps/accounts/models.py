@@ -38,4 +38,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             'refresh_token': str(refresh),
             'access_token': str(refresh.access_token),
         }
+    
+
+class OneTimePassword(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.code
 

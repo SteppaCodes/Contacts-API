@@ -6,13 +6,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("api/v1/schema", SpectacularAPIView.as_view(), name="schema"),
-    path("api/v1/",SpectacularSwaggerView.as_view(url_name="schema")),
-    
-    path('back-dash/', admin.site.urls),
+    path("api/v1/", SpectacularSwaggerView.as_view(url_name="schema")),
+    path("api/back-dash/", admin.site.urls),
     path("api/v1/", include("apps.accounts.urls")),
-    path("api/v1/", include("apps.contacts.urls"))
+    path("api/v1/", include("apps.contacts.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

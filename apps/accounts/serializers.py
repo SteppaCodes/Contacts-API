@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
         ]
 
- 
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     first_name = serializers.CharField()
@@ -34,7 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "last_name",
             "password",
             "password2",
-            "terms_agreement"
+            "terms_agreement",
         ]
 
     def validate(self, attrs):
@@ -45,16 +45,20 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user = User.objects.filter(email=email).first()
         if user:
-            raise serializers.ValidationError({"error": "User with this Email already exists"}) 
+            raise serializers.ValidationError(
+                {"error": "User with this Email already exists"}
+            )
 
-        if password1!= password2:
+        if password1 != password2:
             raise serializers.ValidationError({"error": "Passwords do not match"})
-        
+
         if not terms_agreement:
-            raise serializers.ValidationError({"error": "You must agree to terms and conditions"})
+            raise serializers.ValidationError(
+                {"error": "You must agree to terms and conditions"}
+            )
 
         return super().validate(attrs)
-    
+
     def create(self, validated_data):
         validated_data.pop("password2")
         return User.objects.create_user(**validated_data)
@@ -68,13 +72,7 @@ class LoginSerialzer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'email',
-            'password',
-            'full_name',
-            'access_token',
-            'refresh_token'
-        ]
+        fields = ["email", "password", "full_name", "access_token", "refresh_token"]
 
     def validate(self, attrs):
         email = attrs.get("email")
@@ -94,3 +92,6 @@ class LoginSerialzer(serializers.ModelSerializer):
             "refresh_token": str(tokens.get("refresh_token")),
         }
 
+
+class VerifyOtpSerializer(serializers.Serializer):
+    otp = serializers.CharField()
