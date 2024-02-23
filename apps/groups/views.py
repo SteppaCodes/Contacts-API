@@ -1,10 +1,11 @@
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from drf_spectacular.utils import extend_schema, OpenApiExample
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiParameter
 
 from .serializers import (
     GroupSerializer,
@@ -28,10 +29,28 @@ class GroupListCreateAPIView(APIView, PageNumberPagination):
         summary="Retrieve groups",
         description="This endpoint retrieves groups belonging to the authenticated user.",
         responses={200: GroupSerializer},
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                description="Retrieve a particular page of groups. Defaults to 1",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="query",
+                description="group name",
+                required=False,
+                type=str,
+            ),
+        ],
     )
     def get(self, request):
+        query = request.GET.get("query")
+        if query == None:
+            query = ''
+
         user = User.objects.get(id=request.user.id)
-        groups = user.user_groups.all()
+        groups = user.user_groups.filter(Q(name__icontains=query))
         paginated_qs = self.paginate_queryset(groups, request, view=self)
         serializer = self.serializer_class(paginated_qs, many=True)
         return self.get_paginated_response({"data": serializer.data})
