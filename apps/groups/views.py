@@ -125,3 +125,6 @@ class GroupDetailAPIView(APIView):
             return Response(_("Group deleted successfully"))
         except Group.DoesNotExist:
             return Response(_("Group not found"))
+
+
+
