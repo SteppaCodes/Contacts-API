@@ -15,7 +15,7 @@ tags = ["Contacts"]
 class ContactListCreateAPIView(APIView, PageNumberPagination):
     permission_classes = [IsAuthenticated]
     serializer_class = ContactSerializer
-    page_size = 10
+    page_size = 5
 
     @extend_schema(
         tags=tags,
@@ -24,11 +24,17 @@ class ContactListCreateAPIView(APIView, PageNumberPagination):
         responses={200: ContactSerializer},
         parameters=[
             OpenApiParameter(
+                name="page",
+                description="Retrieve a particular page of contacts. Defaults to 1",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
                 name="query",
                 description="contact first or last name ",
                 required=False,
                 type=str,
-            )
+            ),
         ],
     )
     def get(self, request):

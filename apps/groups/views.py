@@ -22,7 +22,7 @@ tags = ["Groups"]
 class GroupListCreateAPIView(APIView, PageNumberPagination):
     serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated]
-    page_size = 10
+    page_size = 5
 
     @extend_schema(
         tags=tags,
