@@ -2,13 +2,14 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiExample
 
 from .serializers import (
-                        GroupSerializer, 
-                        CreateGroupSerializer, 
-                    )
+    GroupSerializer,
+    CreateGroupSerializer,
+)
 from .models import Group
 from apps.accounts.models import User
 from apps.contacts.serializers import ContactSerializer
@@ -17,9 +18,10 @@ from apps.contacts.serializers import ContactSerializer
 tags = ["Groups"]
 
 
-class GroupListCreateAPIView(APIView):
+class GroupListCreateAPIView(APIView, PageNumberPagination):
     serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated]
+    page_size = 10
 
     @extend_schema(
         tags=tags,
@@ -28,10 +30,11 @@ class GroupListCreateAPIView(APIView):
         responses={200: GroupSerializer},
     )
     def get(self, request):
-        user = User.objects.prefetch_related("user_groups").get(id=request.user.id)
-        groups = user.user_groups
-        serializer = self.serializer_class(groups, many=True)
-        return Response({"data": serializer.data})
+        user = User.objects.get(id=request.user.id)
+        groups = user.user_groups.all()
+        paginated_qs = self.paginate_queryset(groups, request, view=self)
+        serializer = self.serializer_class(paginated_qs, many=True)
+        return self.get_paginated_response({"data": serializer.data})
 
     @extend_schema(
         tags=tags,
@@ -75,8 +78,8 @@ class GroupDetailAPIView(APIView):
         contact_serialzizer = ContactSerializer(contacts, many=True)
         serializer = self.serializer_class(group)
 
-        return Response({"data": serializer.data, "contacts":contact_serialzizer.data})
-    
+        return Response({"data": serializer.data, "contacts": contact_serialzizer.data})
+
     @extend_schema(
         tags=tags,
         summary="Update a group's detail",
@@ -89,7 +92,7 @@ class GroupDetailAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"success": "Group Updated successfully"})
-    
+
     @extend_schema(
         tags=tags,
         summary="Delete a group",
@@ -103,5 +106,3 @@ class GroupDetailAPIView(APIView):
             return Response(_("Group deleted successfully"))
         except Group.DoesNotExist:
             return Response(_("Group not found"))
-
-
