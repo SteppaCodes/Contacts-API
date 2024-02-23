@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Contact, Favourite
-
+from .models import Contact
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -14,30 +13,10 @@ class ContactSerializer(serializers.ModelSerializer):
             "phone_number",
             "contact_picture",
             "is_favourite",
+            "group",
             "created_at",
             "updated_at",
         ]
 
         read_only_fileds = ["created_at", "updated_at"]
 
-
-class FavouritesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Favourite
-        fields = [
-            "id",
-            "contact",
-        ]
-
-    def validate(self, attrs):
-        contact = attrs.get("contact")
-        favourites = Favourite.objects.filter(contact=contact).first()
-
-        contacts = Contact.objects.filter(id=contact.id).first()
-        if not contacts:
-            raise serializers.ValidationError({"error": "Contact does not exist"})
-        else:
-            attrs["contact"] = contacts
-        if favourites:
-            raise serializers.ValidationError({"error": "Contact already in favourites"})
-        return attrs

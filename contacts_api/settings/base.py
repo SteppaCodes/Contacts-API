@@ -34,6 +34,8 @@ LOCAL_APPS = [
     "apps.accounts",
     "apps.common",
     "apps.contacts",
+    "apps.favourites",
+    "apps.groups",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -141,8 +143,15 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "CONTACTS API",
-    "DESCRIPTION": """A contact list API built with django rest framework. For testing, login using the following credentials
-      (email: steppaapitestuser@gmail.com, password: testuser)""",
+    "DESCRIPTION": """
+    A contact list API built with django rest framework. 
+    For testing using existing, login with the following credentials:
+
+    email: steppaapitestuser@gmail.com
+    password: testuser
+    or 
+    create your own account :)
+    """,
     "VERSION": "1.0.0",
     "SECURITY": [
         {
@@ -151,8 +160,9 @@ SPECTACULAR_SETTINGS = {
     ],
     "TAGS": [
         {"name": "Auth", "description": "Authentication Endpoints"},
-        {"name": "Contacts", "description": "contacts endpoints"},
-        {"name": "Favourites", "description": "Favourites endpoints"},
+        {"name": "Contacts", "description": "contacts CRUD endpoints"},
+        {"name": "Favourites", "description": "Favourites CRUD endpoints"},
+        {"name": "Groups", "description": "Groups CRUD endpoints"},
     ],
 }
 
@@ -164,5 +174,3 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 EMAIL_USE_SSL = config("EMAIL_USE_SSL")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
-
-

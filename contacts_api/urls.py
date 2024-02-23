@@ -10,6 +10,8 @@ urlpatterns = [
     path("api/back-dash/", admin.site.urls),
     path("api/v1/", include("apps.accounts.urls")),
     path("api/v1/", include("apps.contacts.urls")),
+    path("api/v1/", include("apps.favourites.urls")),
+    path("api/v1/", include("apps.groups.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
