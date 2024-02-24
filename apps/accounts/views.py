@@ -7,13 +7,18 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiExample
 
 # local imports
-from .serializers import LoginSerialzer, RegisterSerializer, VerifyOtpSerializer
+from .serializers import (
+                        LoginSerialzer,
+                        RegisterSerializer,
+                        VerifyOtpSerializer,
+                        LogoutSerializer,
+)
 from .models import User, OneTimePassword
 from .senders import SendMail
-
 
 tags = ["Auth"]
 
@@ -36,11 +41,12 @@ class RegisterView(APIView):
             user = serializer.data
             SendMail.send_otp(user["email"])
 
-        return Response({
-            "message":f"Hi {user['first_name']}, an otp has been sent to your email address, please provide this code to verify your email", 
-            "data": serializer.data
-            }, 
-            status=status.HTTP_201_CREATED
+        return Response(
+            {
+                "message": f"Hi {user['first_name']}, an otp has been sent to your email address, please provide this code to verify your email",
+                "data": serializer.data,
+            },
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -85,7 +91,6 @@ class VerifyOTPAPIView(APIView):
                 name="Verify User example",
                 value={
                     "otp": "234672",
-                    
                 },
                 description="Example request for verifying a user's email address",
             )
@@ -103,9 +108,26 @@ class VerifyOTPAPIView(APIView):
             if not user.is_email_verified:
                 user.is_email_verified = True
                 user.save()
-                return Response({
-                    "success":"Congrats! your email has been verified successfully"
-                    })
-            return Response({"eeror":"Email has already been verified"})
+                return Response(
+                    {"success": "Congrats! your email has been verified successfully"}
+                )
+            return Response({"eeror": "Email has already been verified"})
         except OneTimePassword.DoesNotExist:
-            return Response({"error":"OTP is invalid or expired"})
+            return Response({"error": "OTP is invalid or expired"})
+
+
+class LogoutAPIView(APIView):
+    serializer_class = LogoutSerializer
+    permission_classes = [IsAuthenticated]
+    @extend_schema(
+        tags=tags,
+        summary="Logout a user",
+        description="This endpoint logs a user out",
+        request=LogoutSerializer,
+        responses={"200": "success"}
+    )
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK) 
