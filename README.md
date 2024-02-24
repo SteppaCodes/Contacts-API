@@ -4,7 +4,7 @@ A contacts api built using django rest framework
 # Features 
 - Authentication: Implements token-based authentication to fortify the API against unauthorized access. Utilizing DRF's authentication classes, i ensure secure communication between clients and the API
 - User Email OTP Verification: Implemented email verification using one-time passwords (OTPs). When users register their email addresses, a unique OTP is generated and sent to their email. Users can verify their email addresses by submitting the OTP they receive. This enhances account security and ensures valid email addresses.
-- CRUD Operations: Leverages the power of Django Rest Framework to seamlessly perform Create, Read, Update, and Delete operations on contacts.
+- CRUD Operations: Leverages the power of Django Rest Framework to seamlessly perform Create, Read, Update, and Delete operations on contacts, groups and favourites.
 - Paginated Response: leveraging the robust capabilities of Django Rest Framework's Pagination class to seamlessly deliver paginated responses for all endpoints returning multiple objects. By implementing pagination, users can efficiently retrieve a specified number of data per response, thereby minimizing query time and significantly boosting overall performance
 - Alphabetical ordering for contact list results, enhancing user experience and making it easier to locate contacts by name
 - Prioritizing Favourite Contacts: Users can mark certain contacts as favourites, allowing them to easily access and prioritize important information.
