@@ -146,7 +146,7 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "CONTACTS API",
     "DESCRIPTION": """
     A contact list API built with django rest framework. 
-    For testing using existing, login with the following credentials:
+    For testing using existing account, login with the following credentials:
 
     email: steppaapitestuser@gmail.com
     password: testuser
