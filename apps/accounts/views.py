@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema, OpenApiExample
 
 # local imports
 from .serializers import (
-                        LoginSerialzer,
+                        LoginSerializer,
                         RegisterSerializer,
                         VerifyOtpSerializer,
                         LogoutSerializer,
@@ -51,14 +51,14 @@ class RegisterView(APIView):
 
 
 class LoginVIew(APIView):
-    serializer_class = LoginSerialzer
+    serializer_class = LoginSerializer
 
     @extend_schema(
         tags=tags,
         summary="Login a user",
         description="This endpoint logs a user in",
-        request=LoginSerialzer,
-        responses={"200": LoginSerialzer},
+        request=LoginSerializer,
+        responses={"200": LoginSerializer},
         examples=[
             OpenApiExample(
                 name="Login User example",
